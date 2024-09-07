@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_primary">#050A30</color>
+    <color name="color_secondary">#FF8300</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="place_holder_hint">#808080</color>
+    <color name="placeholder_background_color">#26FFFFFF</color>
+</resources>
