@@ -3,7 +3,6 @@ package com.example.mymovies.di.modules
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
-import com.example.mymovies.app.MoviesApplication
 import com.example.mymovies.network.ApiInterface
 import com.example.mymovies.network.AuthInterceptor
 import com.example.mymovies.shared.constants.EndPoints
@@ -12,6 +11,9 @@ import com.example.mymovies.shared.constants.SharedPreferencesConstants.MOVIES_S
 import com.example.mymovies.shared.storage.room_db.MoviesDB
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -21,16 +23,12 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-class AppModule(private val app: MoviesApplication) {
-
-    @Provides
-    fun provideApplicationContext(): Context {
-        return app
-    }
+@InstallIn(SingletonComponent::class)
+class AppModule {
 
     @Provides
     @Singleton
-    fun provideHttpClient(): OkHttpClient{
+    fun provideHttpClient(): OkHttpClient {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         val builder = OkHttpClient.Builder()
@@ -62,7 +60,7 @@ class AppModule(private val app: MoviesApplication) {
 
     @Provides
     @Singleton
-    fun provideSharedPreferences(): SharedPreferences{
+    fun provideSharedPreferences(@ApplicationContext app: Context): SharedPreferences {
         return app.getSharedPreferences(
             MOVIES_SHARED_PREFERENCES,
             Context.MODE_PRIVATE
@@ -71,7 +69,7 @@ class AppModule(private val app: MoviesApplication) {
 
     @Provides
     @Singleton
-    fun provideRoomDatabase(): MoviesDB{
+    fun provideRoomDatabase(@ApplicationContext app: Context): MoviesDB {
         return Room.databaseBuilder(app, MoviesDB::class.java, DATABASE_NAME).build()
     }
 }

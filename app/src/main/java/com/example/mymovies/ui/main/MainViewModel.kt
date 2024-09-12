@@ -1,46 +1,62 @@
 package com.example.mymovies.ui.main
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mymovies.model.MainRepository
 import com.example.mymovies.network.response.Genre
 import com.example.mymovies.network.response.MoviesByCategory
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+@HiltViewModel
 class MainViewModel @Inject constructor(private val mainRepository: MainRepository) : ViewModel() {
 
-    private val viewState: MutableLiveData<ViewState> = MutableLiveData()
-    fun getViewState(): LiveData<ViewState> = viewState
+    private val _viewState = MutableStateFlow(HomeViewState())
+    val viewState: StateFlow<HomeViewState> = _viewState
 
-    fun getAllMovieGenres() {
+    init {
+        getAllMovieGenres()
+    }
+
+    private fun getAllMovieGenres() {
         viewModelScope.launch {
-            viewState.value = ViewState.ShowLoadingState(true)
+            _viewState.update {
+                it.copy(showLoadingState = true)
+            }
             val response = mainRepository.getAllGenres()
             if (response != null) {
-                viewState.value = ViewState.ShowMovieGenres(response)
-                viewState.value = ViewState.ShowLoadingState(false)
+                _viewState.update {
+                    it.copy(
+                        genres = response,
+                        showLoadingState = false
+                    )
+                }
             }
         }
     }
 
     fun getMoviesByCategory(categoryId: String){
         viewModelScope.launch {
-            viewState.value = ViewState.ShowLoadingState(true)
+            _viewState.update { it.copy(showLoadingState = true) }
             val response = mainRepository.getMoviesByCategory(categoryId)
-            if(response != null){
-                viewState.value = ViewState.ShowMovieByCategory(response)
-                viewState.value = ViewState.ShowLoadingState(false)
+            if (response != null) {
+                _viewState.update {
+                    it.copy(
+                        category = response,
+                        showLoadingState = false
+                    )
+                }
             }
         }
     }
 
-    sealed class ViewState {
-        data class ShowLoadingState(val loading: Boolean) : ViewState()
-        data class ShowMovieGenres(val genres: List<Genre>) : ViewState()
-        data class ShowMovieByCategory(val category: MoviesByCategory?) : ViewState()
-    }
+    data class HomeViewState(
+        val showLoadingState: Boolean? = null,
+        val genres: List<Genre>? = null,
+        val category: MoviesByCategory? = null
+    )
 
 }

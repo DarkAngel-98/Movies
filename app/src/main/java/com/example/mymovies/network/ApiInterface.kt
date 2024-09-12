@@ -5,7 +5,9 @@ import com.example.mymovies.network.response.MoviesByCategory
 import com.example.mymovies.shared.constants.EndPoints
 import retrofit2.http.GET
 import retrofit2.http.Query
+import javax.inject.Singleton
 
+@Singleton
 interface ApiInterface {
 
     @GET(EndPoints.GET_ALL_GENRES)

@@ -13,8 +13,9 @@ import com.example.mymovies.app.MoviesApplication
 import com.example.mymovies.databinding.FragmentFavoritesBinding
 import com.example.mymovies.ui.main.MainViewModel
 import com.example.mymovies.ui.main.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
+@AndroidEntryPoint
 class FavoritesFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory<MainViewModel>
@@ -23,13 +24,6 @@ class FavoritesFragment : Fragment() {
 
     private val viewModel by lazy {
         ViewModelProvider(requireActivity(), viewModelFactory)[MainViewModel::class.java]
-    }
-
-    override fun onAttach(context: Context) {
-        MoviesApplication.appComponent.inject(this)
-        super.onAttach(context)
-        arguments?.let {
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
