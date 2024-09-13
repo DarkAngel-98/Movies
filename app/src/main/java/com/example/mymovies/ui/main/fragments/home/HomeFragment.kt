@@ -2,6 +2,7 @@ package com.example.mymovies.ui.main.fragments.home
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +56,7 @@ class HomeFragment : Fragment(), CategoryClick {
                     it.category?.let { category ->
                         presentMovieByCategory(category)
                     }
+                    Log.d("Collect", "Collecting")
                 }
             }
         }
