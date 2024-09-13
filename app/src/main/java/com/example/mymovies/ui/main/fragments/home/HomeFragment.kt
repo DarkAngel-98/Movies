@@ -57,6 +57,7 @@ class HomeFragment : Fragment(), CategoryClick {
                         presentMovieByCategory(category)
                     }
                     Log.d("Collect", "Collecting")
+                    Log.d("Collect", "Collecting new mail")
                 }
             }
         }
