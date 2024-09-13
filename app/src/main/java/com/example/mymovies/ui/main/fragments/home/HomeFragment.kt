@@ -28,7 +28,6 @@ class HomeFragment : Fragment(), CategoryClick {
 
     private val viewModel: MainViewModel by viewModels()
     private val movieCategoriesAdapter by lazy { MovieCategoriesAdapter() }
-    private var movieCategories = mutableListOf<Genre>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
